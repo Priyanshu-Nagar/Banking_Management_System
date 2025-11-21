@@ -479,7 +479,7 @@ def change_password():
     
     if form.validate_on_submit():
         # Verify current password
-        if not current_user.verify_password(form.current_password.data):
+        if not current_user.verify_password(form.Current_password.data):
             flash('Current password is incorrect.', 'danger')
             return redirect(url_for('user.change_password'))
         

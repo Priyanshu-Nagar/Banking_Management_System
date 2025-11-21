@@ -340,7 +340,7 @@ def statistics():
     Detailed statistics and analytics page
     """
     # Account type distribution
-    current_count = Account.query.filter_by(account_type='current').count()
+    Current_count = Account.query.filter_by(account_type='Current').count()
     savings_count = Account.query.filter_by(account_type='savings').count()
     
     # Transaction type distribution (last 30 days)
@@ -386,7 +386,7 @@ def statistics():
     return render_template(
         'admin/statistics.html',
         title='System Statistics',
-        current_count=current_count,
+        Current_count=Current_count,
         savings_count=savings_count,
         transfer_count=transfer_count,
         deposit_count=deposit_count,

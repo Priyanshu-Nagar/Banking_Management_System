@@ -45,7 +45,7 @@ def register():
             account = Account(
                 user_id=user.id,
                 account_number=generate_account_number(),
-                account_type='current',
+                account_type='Current',
                 balance=10000  # ₹100.00 in cents
             )
             db.session.add(account)

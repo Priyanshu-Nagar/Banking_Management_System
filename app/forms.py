@@ -120,7 +120,7 @@ class CreateAccountForm(FlaskForm):
     Create new bank account form
     """
     account_type = SelectField('Account Type', choices=[
-        ('current', 'Current Account'),
+        ('Current', 'Current Account'),
         ('savings', 'Savings Account')
     ], validators=[DataRequired(message='Please select account type')])
     
@@ -136,7 +136,7 @@ class ChangePasswordForm(FlaskForm):
     """
     Change password form for logged-in users
     """
-    current_password = PasswordField('Current Password', validators=[
+    Current_password = PasswordField('Current Password', validators=[
         DataRequired(message='Current password is required')
     ])
     
