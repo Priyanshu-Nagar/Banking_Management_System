@@ -1,55 +1,76 @@
 {% extends "layout.html" %}
 
-{% block title %}Transfer Money - Banking System{% endblock %}
+{% block title %}Transfer Money - BankFlow{% endblock %}
 
 {% block content %}
-<div class="mb-3">
+<div class="mb-4">
     <a href="{{ url_for('user.dashboard') }}" class="btn btn-secondary">
-        <i class="bi bi-arrow-left"></i> Back to Dashboard
+        <i class="bi bi-arrow-left"></i> Back
     </a>
 </div>
 
 <div class="row justify-content-center">
-    <div class="col-md-8">
-        <div class="card shadow">
-            <div class="card-header bg-primary text-white">
-                <h4 class="mb-0">
-                    <i class="bi bi-send"></i> Transfer Money
-                </h4>
-            </div>
+    <div class="col-lg-7">
+        <div class="card">
             <div class="card-body p-4">
+                <div class="text-center mb-4">
+                    <div class="d-inline-flex align-items-center justify-content-center bg-primary bg-opacity-10 rounded-circle mb-3" style="width: 80px; height: 80px;">
+                        <i class="bi bi-arrow-left-right text-primary" style="font-size: 2.5rem;"></i>
+                    </div>
+                    <h2 class="fw-bold mb-2">Transfer Money</h2>
+                    <p class="text-muted">Send money to any account instantly</p>
+                </div>
+                
                 <form method="POST" action="{{ url_for('user.transfer') }}">
                     {{ form.hidden_tag() }}
                     
                     <!-- From Account -->
-                    <div class="mb-3">
-                        {{ form.from_account.label(class="form-label") }}
-                        {{ form.from_account(class="form-select" + (" is-invalid" if form.from_account.errors else "")) }}
-                        {% if form.from_account.errors %}
-                            <div class="invalid-feedback">
-                                {% for error in form.from_account.errors %}{{ error }}{% endfor %}
-                            </div>
-                        {% endif %}
+                    <div class="mb-4">
+                        {{ form.from_account.label(class="form-label d-flex align-items-center") }}
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-2">
+                                <i class="bi bi-wallet2"></i>
+                            </span>
+                            {{ form.from_account(class="form-select border-2" + (" is-invalid" if form.from_account.errors else "")) }}
+                            {% if form.from_account.errors %}
+                                <div class="invalid-feedback">
+                                    {% for error in form.from_account.errors %}{{ error }}{% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        <small class="text-muted">Choose which account to send from</small>
+                    </div>
+
+                    <!-- Transfer Direction Indicator -->
+                    <div class="text-center my-4">
+                        <div class="d-inline-flex align-items-center justify-content-center bg-light rounded-circle" style="width: 50px; height: 50px;">
+                            <i class="bi bi-arrow-down text-primary" style="font-size: 1.5rem;"></i>
+                        </div>
                     </div>
 
                     <!-- To Account Number -->
-                    <div class="mb-3">
+                    <div class="mb-4">
                         {{ form.to_account_id.label(class="form-label") }}
-                        {{ form.to_account_id(class="form-control" + (" is-invalid" if form.to_account_id.errors else ""), placeholder="Enter 10-digit account number") }}
-                        {% if form.to_account_id.errors %}
-                            <div class="invalid-feedback">
-                                {% for error in form.to_account_id.errors %}{{ error }}{% endfor %}
-                            </div>
-                        {% endif %}
-                        <small class="form-text text-muted">Enter the recipient's account number</small>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-2">
+                                <i class="bi bi-person-circle"></i>
+                            </span>
+                            {{ form.to_account_id(class="form-control border-2" + (" is-invalid" if form.to_account_id.errors else ""), placeholder="Enter 10-digit account number") }}
+                            {% if form.to_account_id.errors %}
+                                <div class="invalid-feedback">
+                                    {% for error in form.to_account_id.errors %}{{ error }}{% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        <small class="text-muted">The recipient's account number</small>
                     </div>
 
                     <!-- Amount -->
-                    <div class="mb-3">
+                    <div class="mb-4">
                         {{ form.amount.label(class="form-label") }}
-                        <div class="input-group">
-                            <span class="input-group-text">₹</span>
-                            {{ form.amount(class="form-control" + (" is-invalid" if form.amount.errors else ""), placeholder="0.00", step="0.01") }}
+                        <div class="input-group input-group-lg">
+                            <span class="input-group-text bg-light border-2 fw-bold" style="font-size: 1.5rem;">₹</span>
+                            {{ form.amount(class="form-control border-2" + (" is-invalid" if form.amount.errors else ""), placeholder="0.00", step="0.01", style="font-size: 1.5rem; font-weight: 600;") }}
                             {% if form.amount.errors %}
                                 <div class="invalid-feedback">
                                     {% for error in form.amount.errors %}{{ error }}{% endfor %}
@@ -58,22 +79,77 @@
                         </div>
                     </div>
 
+                    <!-- Quick Amount Buttons -->
+                    <div class="mb-4">
+                        <label class="form-label">Quick Amount</label>
+                        <div class="d-flex gap-2 flex-wrap">
+                            <button type="button" class="btn btn-outline-primary btn-sm" onclick="document.querySelector('[name=amount]').value='100'">
+                                ₹100
+                            </button>
+                            <button type="button" class="btn btn-outline-primary btn-sm" onclick="document.querySelector('[name=amount]').value='500'">
+                                ₹500
+                            </button>
+                            <button type="button" class="btn btn-outline-primary btn-sm" onclick="document.querySelector('[name=amount]').value='1000'">
+                                ₹1,000
+                            </button>
+                            <button type="button" class="btn btn-outline-primary btn-sm" onclick="document.querySelector('[name=amount]').value='2000'">
+                                ₹2,000
+                            </button>
+                            <button type="button" class="btn btn-outline-primary btn-sm" onclick="document.querySelector('[name=amount]').value='5000'">
+                                ₹5,000
+                            </button>
+                        </div>
+                    </div>
+
                     <!-- Description -->
-                    <div class="mb-3">
+                    <div class="mb-4">
                         {{ form.description.label(class="form-label") }}
-                        {{ form.description(class="form-control", placeholder="Optional - e.g., Rent payment, Gift, etc.", rows=3) }}
-                        {% if form.description.errors %}
-                            <div class="invalid-feedback">
-                                {% for error in form.description.errors %}{{ error }}{% endfor %}
-                            </div>
-                        {% endif %}
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-2">
+                                <i class="bi bi-chat-left-text"></i>
+                            </span>
+                            {{ form.description(class="form-control border-2", placeholder="e.g., Rent payment, Gift, Food", rows=3) }}
+                            {% if form.description.errors %}
+                                <div class="invalid-feedback">
+                                    {% for error in form.description.errors %}{{ error }}{% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        <small class="text-muted">Optional note for this transfer</small>
                     </div>
 
                     <!-- Submit Button -->
-                    <div class="d-grid">
-                        {{ form.submit(class="btn btn-primary btn-lg") }}
+                    <div class="d-grid gap-2">
+                        {{ form.submit(class="btn btn-primary btn-lg", style="padding: 1rem;") }}
+                        <a href="{{ url_for('user.dashboard') }}" class="btn btn-light">Cancel</a>
                     </div>
                 </form>
+
+                <!-- Security & Info -->
+                <div class="row mt-4 g-3">
+                    <div class="col-md-6">
+                        <div class="p-3 bg-light rounded-3">
+                            <div class="d-flex align-items-center">
+                                <i class="bi bi-lightning-charge text-warning me-2" style="font-size: 1.5rem;"></i>
+                                <div>
+                                    <strong>Instant Transfer</strong>
+                                    <p class="text-muted mb-0 small">Money arrives instantly</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="p-3 bg-light rounded-3">
+                            <div class="d-flex align-items-center">
+                                <i class="bi bi-shield-check text-success me-2" style="font-size: 1.5rem;"></i>
+                                <div>
+                                    <strong>Secure</strong>
+                                    <p class="text-muted mb-0 small">Bank-grade encryption</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

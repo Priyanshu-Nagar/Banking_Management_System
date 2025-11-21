@@ -1,66 +1,114 @@
 {% extends "layout.html" %}
 
-{% block title %}Deposit Money - Banking System{% endblock %}
+{% block title %}Deposit Money - BankFlow{% endblock %}
 
 {% block content %}
-<div class="mb-3">
+<div class="mb-4">
     <a href="{{ url_for('user.dashboard') }}" class="btn btn-secondary">
-        <i class="bi bi-arrow-left"></i> Back to Dashboard
+        <i class="bi bi-arrow-left"></i> Back
     </a>
 </div>
 
 <div class="row justify-content-center">
-    <div class="col-md-6">
-        <div class="card shadow">
-            <div class="card-header bg-success text-white">
-                <h4 class="mb-0">
-                    <i class="bi bi-plus-circle"></i> Deposit Money
-                </h4>
-            </div>
+    <div class="col-lg-6">
+        <div class="card">
             <div class="card-body p-4">
-                <div class="alert alert-info">
-                    <i class="bi bi-info-circle"></i> This is a simulation. In a real system, deposits would be linked to external payment gateways.
+                <div class="text-center mb-4">
+                    <div class="d-inline-flex align-items-center justify-content-center bg-success bg-opacity-10 rounded-circle mb-3" style="width: 80px; height: 80px;">
+                        <i class="bi bi-plus-circle text-success" style="font-size: 2.5rem;"></i>
+                    </div>
+                    <h2 class="fw-bold mb-2">Deposit Money</h2>
+                    <p class="text-muted">Add funds to your account</p>
+                </div>
+
+                <div class="alert alert-info d-flex align-items-start">
+                    <i class="bi bi-info-circle me-2" style="font-size: 1.25rem;"></i>
+                    <div>
+                        <strong>Demo Mode:</strong> This is a simulation. Real systems would connect to payment gateways.
+                    </div>
                 </div>
                 
                 <form method="POST" action="{{ url_for('user.deposit') }}">
                     {{ form.hidden_tag() }}
                     
                     <!-- Account Selection -->
-                    <div class="mb-3">
+                    <div class="mb-4">
                         {{ form.account.label(class="form-label") }}
-                        {{ form.account(class="form-select" + (" is-invalid" if form.account.errors else "")) }}
-                        {% if form.account.errors %}
-                            <div class="invalid-feedback">
-                                {% for error in form.account.errors %}{{ error }}{% endfor %}
-                            </div>
-                        {% endif %}
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-2">
+                                <i class="bi bi-credit-card"></i>
+                            </span>
+                            {{ form.account(class="form-select border-2" + (" is-invalid" if form.account.errors else "")) }}
+                            {% if form.account.errors %}
+                                <div class="invalid-feedback">
+                                    {% for error in form.account.errors %}{{ error }}{% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
                     </div>
 
                     <!-- Amount -->
-                    <div class="mb-3">
+                    <div class="mb-4">
                         {{ form.amount.label(class="form-label") }}
                         <div class="input-group">
-                            <span class="input-group-text">₹</span>
-                            {{ form.amount(class="form-control" + (" is-invalid" if form.amount.errors else ""), placeholder="0.00", step="0.01") }}
+                            <span class="input-group-text bg-light border-2 fw-bold">₹</span>
+                            {{ form.amount(class="form-control border-2" + (" is-invalid" if form.amount.errors else ""), placeholder="0.00", step="0.01") }}
                             {% if form.amount.errors %}
                                 <div class="invalid-feedback">
                                     {% for error in form.amount.errors %}{{ error }}{% endfor %}
                                 </div>
                             {% endif %}
                         </div>
+                        <small class="text-muted">Enter the amount you want to deposit</small>
+                    </div>
+
+                    <!-- Quick Amount Buttons -->
+                    <div class="mb-4">
+                        <label class="form-label">Quick Amount</label>
+                        <div class="d-flex gap-2 flex-wrap">
+                            <button type="button" class="btn btn-outline-secondary btn-sm" onclick="document.querySelector('[name=amount]').value='100'">
+                                ₹100
+                            </button>
+                            <button type="button" class="btn btn-outline-secondary btn-sm" onclick="document.querySelector('[name=amount]').value='500'">
+                                ₹500
+                            </button>
+                            <button type="button" class="btn btn-outline-secondary btn-sm" onclick="document.querySelector('[name=amount]').value='1000'">
+                                ₹1,000
+                            </button>
+                            <button type="button" class="btn btn-outline-secondary btn-sm" onclick="document.querySelector('[name=amount]').value='5000'">
+                                ₹5,000
+                            </button>
+                        </div>
                     </div>
 
                     <!-- Description -->
-                    <div class="mb-3">
+                    <div class="mb-4">
                         {{ form.description.label(class="form-label") }}
-                        {{ form.description(class="form-control", placeholder="Optional", rows=2) }}
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-2">
+                                <i class="bi bi-pencil"></i>
+                            </span>
+                            {{ form.description(class="form-control border-2", placeholder="Optional note (e.g., Salary, Gift)", rows=2) }}
+                        </div>
                     </div>
 
                     <!-- Submit Button -->
-                    <div class="d-grid">
+                    <div class="d-grid gap-2">
                         {{ form.submit(class="btn btn-success btn-lg") }}
+                        <a href="{{ url_for('user.dashboard') }}" class="btn btn-light">Cancel</a>
                     </div>
                 </form>
+
+                <!-- Security Notice -->
+                <div class="mt-4 p-3 bg-light rounded-3">
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-shield-check text-success me-2" style="font-size: 1.5rem;"></i>
+                        <div>
+                            <strong>Secure Transaction</strong>
+                            <p class="text-muted mb-0 small">Your transaction is protected with bank-grade security</p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

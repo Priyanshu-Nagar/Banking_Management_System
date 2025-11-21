@@ -1,55 +1,84 @@
 {% extends "layout.html" %}
 
-{% block title %}Welcome - Banking System{% endblock %}
+{% block title %}Welcome - BankFlow{% endblock %}
 
 {% block content %}
 <div class="text-center mb-5">
-    <h1 class="display-4"><i class="bi bi-bank"></i> Banking Management System</h1>
-    <p class="lead text-muted">Secure, Simple, and Reliable</p>
+    <div class="d-inline-flex align-items-center justify-content-center bg-primary bg-opacity-10 rounded-circle mb-4" style="width: 100px; height: 100px;">
+        <i class="bi bi-bank2 text-primary" style="font-size: 3.5rem;"></i>
+    </div>
+    <h1 class="display-3 fw-bold mb-3">Welcome to BankFlow</h1>
+    <p class="lead text-muted mb-0">Your modern banking experience starts here</p>
+    <p class="text-muted">Secure • Fast • Reliable</p>
 </div>
 
-<div class="row justify-content-center">
-    <div class="col-md-5 mb-4">
-        <div class="card shadow-lg h-100">
-            <div class="card-body text-center p-5">
-                <div class="mb-4">
-                    <i class="bi bi-person-circle text-primary" style="font-size: 5rem;"></i>
+<div class="row g-4 mb-5">
+    <!-- Customer Portal -->
+    <div class="col-lg-6">
+        <div class="card h-100 border-0 shadow-lg" style="transition: all 0.3s ease;">
+            <div class="card-body p-5 text-center">
+                <div class="d-inline-flex align-items-center justify-content-center bg-primary bg-opacity-10 rounded-circle mb-4" style="width: 80px; height: 80px;">
+                    <i class="bi bi-person-circle text-primary" style="font-size: 3rem;"></i>
                 </div>
-                <h3 class="card-title">Customer Login</h3>
-                <p class="card-text text-muted mb-4">
-                    Access your accounts, transfer money, and manage your finances
+                <h3 class="fw-bold mb-3">Customer Portal</h3>
+                <p class="text-muted mb-4">
+                    Access your accounts, transfer money, and manage your finances with ease
                 </p>
-                <div class="d-grid gap-2">
+                
+                <div class="d-grid gap-3 mb-4">
                     <a href="{{ url_for('auth.login') }}" class="btn btn-primary btn-lg">
-                        <i class="bi bi-box-arrow-in-right"></i> Login
+                        <i class="bi bi-box-arrow-in-right"></i> Login to Account
                     </a>
                     <a href="{{ url_for('auth.register') }}" class="btn btn-outline-primary btn-lg">
-                        <i class="bi bi-person-plus"></i> Create Account
+                        <i class="bi bi-person-plus"></i> Create New Account
                     </a>
+                </div>
+
+                <div class="text-start">
+                    <p class="text-muted small mb-2 fw-bold">What you can do:</p>
+                    <ul class="list-unstyled small">
+                        <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Transfer money instantly</li>
+                        <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Check account balances</li>
+                        <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Download statements</li>
+                        <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Manage multiple accounts</li>
+                    </ul>
                 </div>
             </div>
         </div>
     </div>
     
-    <div class="col-md-5 mb-4">
-        <div class="card shadow-lg h-100 border-danger">
-            <div class="card-body text-center p-5">
-                <div class="mb-4">
-                    <i class="bi bi-shield-lock text-danger" style="font-size: 5rem;"></i>
+    <!-- Admin Portal -->
+    <div class="col-lg-6">
+        <div class="card h-100 border-0 shadow-lg" style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); color: white; transition: all 0.3s ease;">
+            <div class="card-body p-5 text-center">
+                <div class="d-inline-flex align-items-center justify-content-center bg-white bg-opacity-25 rounded-circle mb-4" style="width: 80px; height: 80px;">
+                    <i class="bi bi-shield-lock" style="font-size: 3rem;"></i>
                 </div>
-                <h3 class="card-title">Admin Portal</h3>
-                <p class="card-text text-muted mb-4">
-                    Manage users, monitor transactions, and oversee system operations
+                <h3 class="fw-bold mb-3">Admin Portal</h3>
+                <p class="mb-4 opacity-90">
+                    Manage users, monitor transactions, and oversee all system operations
                 </p>
-                <div class="d-grid">
-                    <a href="{{ url_for('auth.admin_login') }}" class="btn btn-danger btn-lg">
+                
+                <div class="d-grid gap-3 mb-4">
+                    <a href="{{ url_for('auth.admin_login') }}" class="btn btn-light btn-lg">
                         <i class="bi bi-shield-lock"></i> Admin Login
                     </a>
                 </div>
-                <div class="mt-3">
-                    <small class="text-muted">
-                        <i class="bi bi-info-circle"></i> For authorized personnel only
-                    </small>
+
+                <div class="alert alert-light bg-white bg-opacity-25 border-0 text-white">
+                    <i class="bi bi-info-circle me-2"></i>
+                    <strong>Authorized Access Only</strong>
+                    <p class="mb-0 small mt-2 opacity-90">This portal is restricted to system administrators</p>
+                </div>
+
+                <div class="text-start mt-4">
+                    <p class="small mb-2 fw-bold opacity-90">Admin Features:</p>
+                    <ul class="list-unstyled small opacity-90">
+                        <li class="mb-2"><i class="bi bi-check-circle-fill me-2"></i>User management</li>
+                        <li class="mb-2"><i class="bi bi-check-circle-fill me-2"></i>Transaction monitoring</li>
+                        <li class="mb-2"><i class="bi bi-check-circle-fill me-2"></i>Account freeze/unfreeze</li>
+                        <li class="mb-2"><i class="bi bi-check-circle-fill me-2"></i>System analytics</li>
+                    </ul>
                 </div>
             </div>
         </div>
@@ -57,24 +86,53 @@
 </div>
 
 <!-- Features Section -->
-<div class="row mt-5">
-    <div class="col-12">
-        <h3 class="text-center mb-4">Why Choose Us?</h3>
-    </div>
-    <div class="col-md-4 text-center mb-3">
-        <i class="bi bi-shield-check text-success" style="font-size: 3rem;"></i>
-        <h5 class="mt-3">Secure</h5>
-        <p class="text-muted">Your data is protected with industry-standard security</p>
-    </div>
-    <div class="col-md-4 text-center mb-3">
-        <i class="bi bi-lightning-charge text-warning" style="font-size: 3rem;"></i>
-        <h5 class="mt-3">Fast</h5>
-        <p class="text-muted">Instant transfers between accounts</p>
-    </div>
-    <div class="col-md-4 text-center mb-3">
-        <i class="bi bi-graph-up text-primary" style="font-size: 3rem;"></i>
-        <h5 class="mt-3">Reliable</h5>
-        <p class="text-muted">24/7 access to your banking services</p>
+<div class="card border-0 bg-light">
+    <div class="card-body p-5">
+        <h3 class="text-center fw-bold mb-5">Why Choose BankFlow?</h3>
+        <div class="row g-4">
+            <div class="col-md-3">
+                <div class="text-center">
+                    <div class="d-inline-flex align-items-center justify-content-center bg-success bg-opacity-10 rounded-circle mb-3" style="width: 70px; height: 70px;">
+                        <i class="bi bi-shield-check text-success" style="font-size: 2.5rem;"></i>
+                    </div>
+                    <h5 class="fw-bold mb-2">Secure</h5>
+                    <p class="text-muted small">Bank-grade encryption protects your data</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="text-center">
+                    <div class="d-inline-flex align-items-center justify-content-center bg-warning bg-opacity-10 rounded-circle mb-3" style="width: 70px; height: 70px;">
+                        <i class="bi bi-lightning-charge text-warning" style="font-size: 2.5rem;"></i>
+                    </div>
+                    <h5 class="fw-bold mb-2">Fast</h5>
+                    <p class="text-muted small">Instant transfers between accounts</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="text-center">
+                    <div class="d-inline-flex align-items-center justify-content-center bg-primary bg-opacity-10 rounded-circle mb-3" style="width: 70px; height: 70px;">
+                        <i class="bi bi-clock-history text-primary" style="font-size: 2.5rem;"></i>
+                    </div>
+                    <h5 class="fw-bold mb-2">24/7 Access</h5>
+                    <p class="text-muted small">Banking services anytime, anywhere</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="text-center">
+                    <div class="d-inline-flex align-items-center justify-content-center bg-info bg-opacity-10 rounded-circle mb-3" style="width: 70px; height: 70px;">
+                        <i class="bi bi-phone text-info" style="font-size: 2.5rem;"></i>
+                    </div>
+                    <h5 class="fw-bold mb-2">Mobile Ready</h5>
+                    <p class="text-muted small">Access from any device seamlessly</p>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
+
+<style>
+    .card:hover {
+        transform: translateY(-10px);
+    }
+</style>
 {% endblock %}

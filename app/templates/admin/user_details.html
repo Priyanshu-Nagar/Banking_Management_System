@@ -3,46 +3,76 @@
 {% block title %}User Details - Admin{% endblock %}
 
 {% block content %}
-<div class="mb-3">
+<div class="mb-4">
     <a href="{{ url_for('admin.users') }}" class="btn btn-secondary">
         <i class="bi bi-arrow-left"></i> Back to Users
     </a>
 </div>
 
-<!-- User Information -->
-<div class="card mb-4">
-    <div class="card-header bg-primary text-white">
-        <h4 class="mb-0"><i class="bi bi-person"></i> User Information</h4>
-    </div>
-    <div class="card-body">
-        <div class="row">
-            <div class="col-md-6">
-                <p><strong>Email:</strong> {{ user.email }}</p>
-                <p><strong>Name:</strong> {{ user.full_name or 'N/A' }}</p>
-                <p><strong>Phone:</strong> {{ user.phone or 'N/A' }}</p>
+<!-- User Profile Card -->
+<div class="card mb-4 border-0 shadow-lg" style="background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%); color: white;">
+    <div class="card-body p-4">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <div class="d-flex align-items-center mb-3">
+                    <div class="bg-white bg-opacity-25 rounded-circle p-3 me-3">
+                        <i class="bi bi-person-circle" style="font-size: 3rem;"></i>
+                    </div>
+                    <div>
+                        <h5 class="mb-1 opacity-75">User Profile</h5>
+                        <h2 class="mb-0 fw-bold">{{ user.email }}</h2>
+                    </div>
+                </div>
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <div class="bg-white bg-opacity-10 rounded p-3">
+                            <small class="opacity-75 d-block mb-1">Full Name</small>
+                            <strong>{{ user.full_name or 'N/A' }}</strong>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="bg-white bg-opacity-10 rounded p-3">
+                            <small class="opacity-75 d-block mb-1">Phone</small>
+                            <strong>{{ user.phone or 'N/A' }}</strong>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="bg-white bg-opacity-10 rounded p-3">
+                            <small class="opacity-75 d-block mb-1">Member Since</small>
+                            <strong>{{ user.created_at.strftime('%b %d, %Y') }}</strong>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="col-md-6">
-                <p><strong>Registered:</strong> {{ user.created_at.strftime('%Y-%m-%d %H:%M') }}</p>
-                <p><strong>Total Balance:</strong> <span class="fs-4 text-success">₹{{ "%.2f"|format(total_balance) }}</span></p>
-                <p><strong>Status:</strong> 
+            <div class="col-md-4 text-md-end mt-3 mt-md-0">
+                <div class="mb-3">
+                    <small class="opacity-75 d-block mb-2">Total Balance</small>
+                    <h1 class="display-4 fw-bold mb-0">₹{{ "%.2f"|format(total_balance) }}</h1>
+                </div>
+                <div class="d-flex gap-2 justify-content-md-end">
                     {% if user.is_active %}
-                        <span class="badge bg-success">Active</span>
+                        <span class="badge bg-success px-3 py-2">
+                            <i class="bi bi-check-circle"></i> Active
+                        </span>
                     {% else %}
-                        <span class="badge bg-danger">Inactive</span>
+                        <span class="badge bg-danger px-3 py-2">
+                            <i class="bi bi-x-circle"></i> Inactive
+                        </span>
                     {% endif %}
-                </p>
+                </div>
             </div>
         </div>
-        <hr>
-        <!-- Toggle Status Form -->
+        
+        <!-- Action Button -->
+        <hr class="my-4 opacity-25">
         <form method="POST" action="{{ url_for('admin.toggle_user_status', user_id=user.id) }}" class="d-inline">
             <input type="hidden" name="csrf_token" value="{{ csrf_token() if csrf_token else '' }}">
             {% if user.is_active %}
-                <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to deactivate this user?')">
+                <button type="submit" class="btn btn-light" onclick="return confirm('Are you sure you want to deactivate this user?')">
                     <i class="bi bi-lock"></i> Deactivate User
                 </button>
             {% else %}
-                <button type="submit" class="btn btn-success" onclick="return confirm('Are you sure you want to activate this user?')">
+                <button type="submit" class="btn btn-light" onclick="return confirm('Are you sure you want to activate this user?')">
                     <i class="bi bi-unlock"></i> Activate User
                 </button>
             {% endif %}
@@ -50,16 +80,16 @@
     </div>
 </div>
 
-<!-- User Accounts -->
-<div class="card mb-4">
-    <div class="card-header">
-        <h5 class="mb-0"><i class="bi bi-credit-card"></i> Accounts</h5>
+<!-- Accounts Section -->
+<div class="card mb-4 border-0 shadow-sm">
+    <div class="card-header bg-white border-0 py-3">
+        <h5 class="mb-0 fw-bold"><i class="bi bi-credit-card text-success"></i> User Accounts</h5>
     </div>
-    <div class="card-body">
+    <div class="card-body p-0">
         {% if accounts %}
             <div class="table-responsive">
-                <table class="table table-hover">
-                    <thead>
+                <table class="table table-hover mb-0">
+                    <thead class="bg-light">
                         <tr>
                             <th>Account Number</th>
                             <th>Type</th>
@@ -72,17 +102,38 @@
                     <tbody>
                         {% for account in accounts %}
                         <tr>
-                            <td><strong>{{ account.account_number }}</strong></td>
-                            <td><span class="badge bg-secondary">{{ account.account_type.title() }}</span></td>
-                            <td>₹{{ "%.2f"|format(account.get_balance()) }}</td>
                             <td>
-                                {% if account.is_frozen %}
-                                    <span class="badge bg-danger">Frozen</span>
+                                <div class="d-flex align-items-center">
+                                    <div class="bg-primary bg-opacity-10 rounded p-2 me-2">
+                                        <i class="bi bi-credit-card text-primary"></i>
+                                    </div>
+                                    <span class="font-monospace fw-bold">{{ account.account_number }}</span>
+                                </div>
+                            </td>
+                            <td>
+                                {% if account.account_type == 'checking' %}
+                                    <span class="badge bg-primary">
+                                        <i class="bi bi-wallet2"></i> Current
+                                    </span>
                                 {% else %}
-                                    <span class="badge bg-success">Active</span>
+                                    <span class="badge bg-success">
+                                        <i class="bi bi-piggy-bank"></i> Savings
+                                    </span>
                                 {% endif %}
                             </td>
-                            <td>{{ account.created_at.strftime('%Y-%m-%d') }}</td>
+                            <td><strong class="text-success">₹{{ "%.2f"|format(account.get_balance()) }}</strong></td>
+                            <td>
+                                {% if account.is_frozen %}
+                                    <span class="badge bg-danger">
+                                        <i class="bi bi-lock"></i> Frozen
+                                    </span>
+                                {% else %}
+                                    <span class="badge bg-success">
+                                        <i class="bi bi-check-circle"></i> Active
+                                    </span>
+                                {% endif %}
+                            </td>
+                            <td>{{ account.created_at.strftime('%b %d, %Y') }}</td>
                             <td>
                                 <form method="POST" action="{{ url_for('admin.toggle_account_freeze', account_id=account.id) }}" class="d-inline">
                                     <input type="hidden" name="csrf_token" value="{{ csrf_token() if csrf_token else '' }}">
@@ -103,23 +154,26 @@
                 </table>
             </div>
         {% else %}
-            <p class="text-muted mb-0">No accounts found.</p>
+            <div class="p-4 text-center">
+                <i class="bi bi-inbox" style="font-size: 3rem; opacity: 0.2;"></i>
+                <p class="text-muted mt-2 mb-0">No accounts found</p>
+            </div>
         {% endif %}
     </div>
 </div>
 
 <!-- Recent Transactions -->
-<div class="card">
-    <div class="card-header">
-        <h5 class="mb-0"><i class="bi bi-clock-history"></i> Recent Transactions</h5>
+<div class="card border-0 shadow-sm">
+    <div class="card-header bg-white border-0 py-3">
+        <h5 class="mb-0 fw-bold"><i class="bi bi-clock-history text-info"></i> Recent Transactions (Last 20)</h5>
     </div>
-    <div class="card-body">
+    <div class="card-body p-0">
         {% if recent_transactions %}
             <div class="table-responsive">
-                <table class="table table-sm">
-                    <thead>
+                <table class="table table-hover mb-0">
+                    <thead class="bg-light">
                         <tr>
-                            <th>Date</th>
+                            <th>Date & Time</th>
                             <th>Type</th>
                             <th>From</th>
                             <th>To</th>
@@ -130,31 +184,51 @@
                     <tbody>
                         {% for transaction in recent_transactions %}
                         <tr>
-                            <td>{{ transaction.timestamp.strftime('%Y-%m-%d %H:%M') }}</td>
-                            <td><span class="badge bg-info">{{ transaction.transaction_type }}</span></td>
+                            <td>
+                                <div class="fw-semibold">{{ transaction.timestamp.strftime('%b %d, %Y') }}</div>
+                                <small class="text-muted">{{ transaction.timestamp.strftime('%I:%M %p') }}</small>
+                            </td>
+                            <td>
+                                {% if transaction.transaction_type == 'transfer' %}
+                                    <span class="badge bg-primary">
+                                        <i class="bi bi-arrow-left-right"></i> Transfer
+                                    </span>
+                                {% elif transaction.transaction_type == 'deposit' %}
+                                    <span class="badge bg-success">
+                                        <i class="bi bi-plus-circle"></i> Deposit
+                                    </span>
+                                {% else %}
+                                    <span class="badge bg-warning">
+                                        <i class="bi bi-dash-circle"></i> Withdrawal
+                                    </span>
+                                {% endif %}
+                            </td>
                             <td>
                                 {% if transaction.source_account %}
-                                    {{ transaction.source_account.account_number }}
+                                    <span class="font-monospace small">{{ transaction.source_account.account_number }}</span>
                                 {% else %}
-                                    External
+                                    <span class="text-muted">External</span>
                                 {% endif %}
                             </td>
                             <td>
                                 {% if transaction.destination_account %}
-                                    {{ transaction.destination_account.account_number }}
+                                    <span class="font-monospace small">{{ transaction.destination_account.account_number }}</span>
                                 {% else %}
-                                    External
+                                    <span class="text-muted">External</span>
                                 {% endif %}
                             </td>
-                            <td>₹{{ "%.2f"|format(transaction.get_amount()) }}</td>
-                            <td>{{ transaction.description or 'N/A' }}</td>
+                            <td><strong class="text-success">₹{{ "%.2f"|format(transaction.get_amount()) }}</strong></td>
+                            <td><span class="text-muted">{{ transaction.description or 'No description' }}</span></td>
                         </tr>
                         {% endfor %}
                     </tbody>
                 </table>
             </div>
         {% else %}
-            <p class="text-muted mb-0">No transactions found.</p>
+            <div class="p-4 text-center">
+                <i class="bi bi-inbox" style="font-size: 3rem; opacity: 0.2;"></i>
+                <p class="text-muted mt-2 mb-0">No transactions found</p>
+            </div>
         {% endif %}
     </div>
 </div>

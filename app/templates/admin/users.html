@@ -3,44 +3,94 @@
 {% block title %}Manage Users - Admin{% endblock %}
 
 {% block content %}
-<h2 class="mb-4">
-    <i class="bi bi-people"></i> Manage Users
-</h2>
+<div class="mb-4">
+    <h1 class="fw-bold mb-2">
+        <i class="bi bi-people text-primary"></i> User Management
+    </h1>
+    <p class="text-muted">View, search, and manage all system users</p>
+</div>
 
-<!-- Filters -->
-<div class="card mb-4">
+<!-- Filters Card -->
+<div class="card mb-4 border-0 shadow-sm">
+    <div class="card-header bg-white border-0 py-3">
+        <h5 class="mb-0 fw-bold"><i class="bi bi-funnel text-primary"></i> Search & Filter</h5>
+    </div>
     <div class="card-body">
         <form method="GET" action="{{ url_for('admin.users') }}" class="row g-3">
-            <div class="col-md-4">
-                <label class="form-label">Search</label>
-                <input type="text" name="search" class="form-control" placeholder="Email or name..." value="{{ search_query }}">
+            <div class="col-md-5">
+                <label class="form-label fw-semibold">Search Users</label>
+                <div class="input-group">
+                    <span class="input-group-text bg-light border-2">
+                        <i class="bi bi-search"></i>
+                    </span>
+                    <input type="text" name="search" class="form-control border-2" placeholder="Email or name..." value="{{ search_query }}">
+                </div>
             </div>
             <div class="col-md-3">
-                <label class="form-label">Status</label>
-                <select name="status" class="form-select">
-                    <option value="all" {% if status_filter == 'all' %}selected{% endif %}>All Users</option>
-                    <option value="active" {% if status_filter == 'active' %}selected{% endif %}>Active Only</option>
-                    <option value="inactive" {% if status_filter == 'inactive' %}selected{% endif %}>Inactive Only</option>
+                <label class="form-label fw-semibold">Status Filter</label>
+                <select name="status" class="form-select border-2">
+                    <option value="all" {% if status_filter == 'all' %}selected{% endif %}>👥 All Users</option>
+                    <option value="active" {% if status_filter == 'active' %}selected{% endif %}>✅ Active Only</option>
+                    <option value="inactive" {% if status_filter == 'inactive' %}selected{% endif %}>❌ Inactive Only</option>
                 </select>
             </div>
             <div class="col-md-2 d-flex align-items-end">
                 <button type="submit" class="btn btn-primary w-100">
-                    <i class="bi bi-search"></i> Filter
+                    <i class="bi bi-search"></i> Search
                 </button>
+            </div>
+            <div class="col-md-2 d-flex align-items-end">
+                <a href="{{ url_for('admin.users') }}" class="btn btn-outline-secondary w-100">
+                    <i class="bi bi-arrow-clockwise"></i> Reset
+                </a>
             </div>
         </form>
     </div>
 </div>
 
+<!-- Stats Overview -->
+{% if users %}
+<div class="row g-4 mb-4">
+    <div class="col-md-6">
+        <div class="card border-0 shadow-sm" style="background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%); color: white;">
+            <div class="card-body text-center p-4">
+                <i class="bi bi-people mb-2" style="font-size: 2.5rem;"></i>
+                <h3 class="fw-bold mb-1">{{ pagination.total if pagination else users|length }}</h3>
+                <p class="mb-0 opacity-90">Total Users Found</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card border-0 shadow-sm" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white;">
+            <div class="card-body text-center p-4">
+                <i class="bi bi-filter-circle mb-2" style="font-size: 2.5rem;"></i>
+                <h3 class="fw-bold mb-1">
+                    {% if status_filter == 'active' %}Active
+                    {% elif status_filter == 'inactive' %}Inactive
+                    {% else %}All{% endif %}
+                </h3>
+                <p class="mb-0 opacity-90">Current Filter</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
 <!-- Users Table -->
-<div class="card">
-    <div class="card-body">
+<div class="card border-0 shadow-sm">
+    <div class="card-header bg-white border-0 py-3 d-flex justify-content-between align-items-center">
+        <h5 class="mb-0 fw-bold"><i class="bi bi-table text-info"></i> User List</h5>
+        {% if users %}
+            <span class="badge bg-primary">{{ pagination.total if pagination else users|length }} users</span>
+        {% endif %}
+    </div>
+    <div class="card-body p-0">
         {% if users %}
             <div class="table-responsive">
-                <table class="table table-hover">
-                    <thead>
+                <table class="table table-hover mb-0">
+                    <thead class="bg-light">
                         <tr>
-                            <th>ID</th>
+                            <th>User</th>
                             <th>Email</th>
                             <th>Name</th>
                             <th>Registered</th>
@@ -51,20 +101,37 @@
                     <tbody>
                         {% for user in users %}
                         <tr>
-                            <td>{{ user.id }}</td>
-                            <td>{{ user.email }}</td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="bg-primary bg-opacity-10 rounded-circle p-2 me-2">
+                                        <i class="bi bi-person text-primary"></i>
+                                    </div>
+                                    <span class="badge bg-secondary">#{{ user.id }}</span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="fw-semibold">{{ user.email }}</div>
+                                <small class="text-muted">User ID: {{ user.id }}</small>
+                            </td>
                             <td>{{ user.full_name or 'N/A' }}</td>
-                            <td>{{ user.created_at.strftime('%Y-%m-%d') }}</td>
+                            <td>
+                                <div>{{ user.created_at.strftime('%b %d, %Y') }}</div>
+                                <small class="text-muted">{{ user.created_at.strftime('%I:%M %p') }}</small>
+                            </td>
                             <td>
                                 {% if user.is_active %}
-                                    <span class="badge bg-success">Active</span>
+                                    <span class="badge bg-success px-3 py-2">
+                                        <i class="bi bi-check-circle"></i> Active
+                                    </span>
                                 {% else %}
-                                    <span class="badge bg-danger">Inactive</span>
+                                    <span class="badge bg-danger px-3 py-2">
+                                        <i class="bi bi-x-circle"></i> Inactive
+                                    </span>
                                 {% endif %}
                             </td>
                             <td>
                                 <a href="{{ url_for('admin.user_details', user_id=user.id) }}" class="btn btn-sm btn-primary">
-                                    <i class="bi bi-eye"></i> View
+                                    <i class="bi bi-eye"></i> View Details
                                 </a>
                             </td>
                         </tr>
@@ -74,36 +141,99 @@
             </div>
 
             <!-- Pagination -->
-            {% if pagination.pages > 1 %}
-            <nav>
-                <ul class="pagination justify-content-center">
-                    {% if pagination.has_prev %}
-                        <li class="page-item">
-                            <a class="page-link" href="{{ url_for('admin.users', page=pagination.prev_num, status=status_filter, search=search_query) }}">Previous</a>
-                        </li>
-                    {% endif %}
-                    
-                    {% for page_num in pagination.iter_pages() %}
-                        {% if page_num %}
-                            <li class="page-item {% if page_num == pagination.page %}active{% endif %}">
-                                <a class="page-link" href="{{ url_for('admin.users', page=page_num, status=status_filter, search=search_query) }}">{{ page_num }}</a>
+            {% if pagination and pagination.pages > 1 %}
+            <div class="p-3 border-top">
+                <nav>
+                    <ul class="pagination justify-content-center mb-0">
+                        {% if pagination.has_prev %}
+                            <li class="page-item">
+                                <a class="page-link" href="{{ url_for('admin.users', page=pagination.prev_num, status=status_filter, search=search_query) }}">
+                                    <i class="bi bi-chevron-left"></i> Previous
+                                </a>
                             </li>
                         {% endif %}
-                    {% endfor %}
-                    
-                    {% if pagination.has_next %}
-                        <li class="page-item">
-                            <a class="page-link" href="{{ url_for('admin.users', page=pagination.next_num, status=status_filter, search=search_query) }}">Next</a>
-                        </li>
-                    {% endif %}
-                </ul>
-            </nav>
+                        
+                        {% for page_num in pagination.iter_pages() %}
+                            {% if page_num %}
+                                <li class="page-item {% if page_num == pagination.page %}active{% endif %}">
+                                    <a class="page-link" href="{{ url_for('admin.users', page=page_num, status=status_filter, search=search_query) }}">
+                                        {{ page_num }}
+                                    </a>
+                                </li>
+                            {% else %}
+                                <li class="page-item disabled"><span class="page-link">...</span></li>
+                            {% endif %}
+                        {% endfor %}
+                        
+                        {% if pagination.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="{{ url_for('admin.users', page=pagination.next_num, status=status_filter, search=search_query) }}">
+                                    Next <i class="bi bi-chevron-right"></i>
+                                </a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+                
+                <!-- Page Info -->
+                <div class="text-center mt-3">
+                    <small class="text-muted">
+                        Showing {{ ((pagination.page - 1) * 20) + 1 }} to {{ min(pagination.page * 20, pagination.total) }} of {{ pagination.total }} users
+                    </small>
+                </div>
+            </div>
             {% endif %}
         {% else %}
-            <div class="alert alert-info mb-0">
-                <i class="bi bi-info-circle"></i> No users found matching your criteria.
+            <div class="p-5 text-center">
+                <i class="bi bi-inbox" style="font-size: 4rem; opacity: 0.2;"></i>
+                <h5 class="text-muted mt-3 mb-2">No Users Found</h5>
+                <p class="text-muted mb-4">
+                    {% if search_query or status_filter != 'all' %}
+                        No users match your search criteria. Try adjusting your filters.
+                    {% else %}
+                        There are no users in the system yet.
+                    {% endif %}
+                </p>
+                {% if search_query or status_filter != 'all' %}
+                    <a href="{{ url_for('admin.users') }}" class="btn btn-primary">
+                        <i class="bi bi-arrow-clockwise"></i> Clear Filters
+                    </a>
+                {% endif %}
             </div>
         {% endif %}
     </div>
 </div>
+
+<!-- Quick Stats Footer -->
+{% if users %}
+<div class="row g-3 mt-4">
+    <div class="col-md-4">
+        <div class="card border-0 bg-light">
+            <div class="card-body text-center">
+                <i class="bi bi-calendar-check text-success mb-2" style="font-size: 2rem;"></i>
+                <p class="mb-0 small text-muted">Active Users</p>
+                <h5 class="mb-0 fw-bold">{{ users|selectattr('is_active', 'equalto', True)|list|length }}</h5>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card border-0 bg-light">
+            <div class="card-body text-center">
+                <i class="bi bi-x-circle text-danger mb-2" style="font-size: 2rem;"></i>
+                <p class="mb-0 small text-muted">Inactive Users</p>
+                <h5 class="mb-0 fw-bold">{{ users|selectattr('is_active', 'equalto', False)|list|length }}</h5>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card border-0 bg-light">
+            <div class="card-body text-center">
+                <i class="bi bi-graph-up text-primary mb-2" style="font-size: 2rem;"></i>
+                <p class="mb-0 small text-muted">On This Page</p>
+                <h5 class="mb-0 fw-bold">{{ users|length }}</h5>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
 {% endblock %}

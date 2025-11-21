@@ -1,60 +1,164 @@
 {% extends "layout.html" %}
 
-{% block title %}Create Account - Banking System{% endblock %}
+{% block title %}Create Account - BankFlow{% endblock %}
 
 {% block content %}
-<div class="mb-3">
+<div class="mb-4">
     <a href="{{ url_for('user.dashboard') }}" class="btn btn-secondary">
-        <i class="bi bi-arrow-left"></i> Back to Dashboard
+        <i class="bi bi-arrow-left"></i> Back
     </a>
 </div>
 
 <div class="row justify-content-center">
-    <div class="col-md-6">
-        <div class="card shadow">
-            <div class="card-header bg-success text-white">
-                <h4 class="mb-0">
-                    <i class="bi bi-credit-card-2-front"></i> Create New Account
-                </h4>
-            </div>
+    <div class="col-lg-8">
+        <div class="card">
             <div class="card-body p-4">
+                <div class="text-center mb-4">
+                    <div class="d-inline-flex align-items-center justify-content-center bg-info bg-opacity-10 rounded-circle mb-3" style="width: 80px; height: 80px;">
+                        <i class="bi bi-credit-card-2-front text-info" style="font-size: 2.5rem;"></i>
+                    </div>
+                    <h2 class="fw-bold mb-2">Create New Account</h2>
+                    <p class="text-muted">Choose your account type and get started</p>
+                </div>
+                
                 <form method="POST" action="{{ url_for('user.create_account') }}">
                     {{ form.hidden_tag() }}
                     
-                    <!-- Account Type -->
-                    <div class="mb-3">
-                        {{ form.account_type.label(class="form-label") }}
-                        {{ form.account_type(class="form-select" + (" is-invalid" if form.account_type.errors else "")) }}
+                    <!-- Account Type Selection with Cards -->
+                    <div class="mb-4">
+                        <label class="form-label fw-bold">Choose Account Type</label>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <input type="radio" class="btn-check" name="account_type" id="checking" value="checking" checked>
+                                <label class="card h-100 border-2 cursor-pointer" for="checking" style="cursor: pointer; transition: all 0.3s;">
+                                    <div class="card-body text-center p-4">
+                                        <i class="bi bi-wallet2 text-primary mb-3" style="font-size: 3rem;"></i>
+                                        <h5 class="fw-bold mb-2">Current Account</h5>
+                                        <p class="text-muted mb-3">Perfect for daily transactions and bill payments</p>
+                                        <ul class="list-unstyled text-start small">
+                                            <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Unlimited transactions</li>
+                                            <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Debit card access</li>
+                                            <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Online banking</li>
+                                        </ul>
+                                    </div>
+                                </label>
+                            </div>
+                            <div class="col-md-6">
+                                <input type="radio" class="btn-check" name="account_type" id="savings" value="savings">
+                                <label class="card h-100 border-2 cursor-pointer" for="savings" style="cursor: pointer; transition: all 0.3s;">
+                                    <div class="card-body text-center p-4">
+                                        <i class="bi bi-piggy-bank text-success mb-3" style="font-size: 3rem;"></i>
+                                        <h5 class="fw-bold mb-2">Savings Account</h5>
+                                        <p class="text-muted mb-3">Build your savings with better interest rates</p>
+                                        <ul class="list-unstyled text-start small">
+                                            <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Higher interest rate</li>
+                                            <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Secure savings</li>
+                                            <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Goal tracking</li>
+                                        </ul>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                        {{ form.account_type(class="d-none") }}
                         {% if form.account_type.errors %}
-                            <div class="invalid-feedback">
+                            <div class="text-danger mt-2">
                                 {% for error in form.account_type.errors %}{{ error }}{% endfor %}
                             </div>
                         {% endif %}
-                        <small class="form-text text-muted">Choose between checking or savings account</small>
                     </div>
 
                     <!-- Initial Deposit -->
-                    <div class="mb-3">
-                        {{ form.initial_deposit.label(class="form-label") }}
-                        <div class="input-group">
-                            <span class="input-group-text">₹</span>
-                            {{ form.initial_deposit(class="form-control" + (" is-invalid" if form.initial_deposit.errors else ""), step="0.01") }}
+                    <div class="mb-4">
+                        {{ form.initial_deposit.label(class="form-label fw-bold") }}
+                        <div class="input-group input-group-lg">
+                            <span class="input-group-text bg-light border-2 fw-bold" style="font-size: 1.5rem;">₹</span>
+                            {{ form.initial_deposit(class="form-control border-2" + (" is-invalid" if form.initial_deposit.errors else ""), step="0.01", style="font-size: 1.5rem; font-weight: 600;") }}
                             {% if form.initial_deposit.errors %}
                                 <div class="invalid-feedback">
                                     {% for error in form.initial_deposit.errors %}{{ error }}{% endfor %}
                                 </div>
                             {% endif %}
                         </div>
-                        <small class="form-text text-muted">Minimum deposit: ₹10.00</small>
+                        <small class="text-muted">Minimum deposit: ₹10.00</small>
+                    </div>
+
+                    <!-- Quick Amount Buttons -->
+                    <div class="mb-4">
+                        <label class="form-label">Suggested Amounts</label>
+                        <div class="d-flex gap-2 flex-wrap">
+                            <button type="button" class="btn btn-outline-info btn-sm" onclick="document.querySelector('[name=initial_deposit]').value='100'">
+                                ₹100
+                            </button>
+                            <button type="button" class="btn btn-outline-info btn-sm" onclick="document.querySelector('[name=initial_deposit]').value='500'">
+                                ₹500
+                            </button>
+                            <button type="button" class="btn btn-outline-info btn-sm" onclick="document.querySelector('[name=initial_deposit]').value='1000'">
+                                ₹1,000
+                            </button>
+                            <button type="button" class="btn btn-outline-info btn-sm" onclick="document.querySelector('[name=initial_deposit]').value='5000'">
+                                ₹5,000
+                            </button>
+                            <button type="button" class="btn btn-outline-info btn-sm" onclick="document.querySelector('[name=initial_deposit]').value='10000'">
+                                ₹10,000
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Benefits Box -->
+                    <div class="alert alert-info d-flex align-items-start mb-4">
+                        <i class="bi bi-star-fill me-2" style="font-size: 1.25rem;"></i>
+                        <div>
+                            <strong>Account Benefits:</strong> No monthly fees, instant transfers, 24/7 access, and secure online banking.
+                        </div>
                     </div>
 
                     <!-- Submit Button -->
-                    <div class="d-grid">
-                        {{ form.submit(class="btn btn-success btn-lg") }}
+                    <div class="d-grid gap-2">
+                        {{ form.submit(class="btn btn-info btn-lg text-white", style="padding: 1rem;") }}
+                        <a href="{{ url_for('user.dashboard') }}" class="btn btn-light">Cancel</a>
                     </div>
                 </form>
+
+                <!-- Features Grid -->
+                <div class="row mt-4 g-3">
+                    <div class="col-md-4">
+                        <div class="text-center p-3 bg-light rounded-3">
+                            <i class="bi bi-shield-check text-success mb-2" style="font-size: 2rem;"></i>
+                            <p class="mb-0 small fw-bold">FDIC Insured</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="text-center p-3 bg-light rounded-3">
+                            <i class="bi bi-lightning-charge text-warning mb-2" style="font-size: 2rem;"></i>
+                            <p class="mb-0 small fw-bold">Instant Setup</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="text-center p-3 bg-light rounded-3">
+                            <i class="bi bi-phone text-primary mb-2" style="font-size: 2rem;"></i>
+                            <p class="mb-0 small fw-bold">Mobile Access</p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
+
+<style>
+    .btn-check:checked + label {
+        border-color: var(--primary) !important;
+        box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+        transform: translateY(-2px);
+    }
+</style>
+
+<script>
+    // Update hidden field when radio buttons change
+    document.querySelectorAll('input[name="account_type"]').forEach(radio => {
+        radio.addEventListener('change', function() {
+            document.querySelector('select[name="account_type"]').value = this.value;
+        });
+    });
+</script>
 {% endblock %}

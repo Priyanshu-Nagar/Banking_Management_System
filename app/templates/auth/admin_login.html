@@ -1,65 +1,126 @@
 {% extends "layout.html" %}
 
-{% block title %}Admin Login - Banking System{% endblock %}
+{% block title %}Admin Login - BankFlow{% endblock %}
 
 {% block content %}
 <div class="row justify-content-center">
-    <div class="col-md-6">
-        <div class="card shadow border-danger">
+    <div class="col-lg-5 col-md-7">
+        <div class="card border-0 shadow-lg" style="border-top: 4px solid #ef4444 !important;">
             <div class="card-body p-5">
-                <h2 class="text-center mb-4">
-                    <i class="bi bi-shield-lock text-danger"></i> Admin Login
-                </h2>
-                
-                <div class="alert alert-warning" role="alert">
-                    <i class="bi bi-exclamation-triangle"></i> 
-                    <strong>Admin Access Only</strong><br>
-                    Default: username = <code>admin</code>, password = <code>admin123</code>
+                <!-- Header -->
+                <div class="text-center mb-4">
+                    <div class="d-inline-flex align-items-center justify-content-center bg-danger bg-opacity-10 rounded-circle mb-3" style="width: 70px; height: 70px;">
+                        <i class="bi bi-shield-lock text-danger" style="font-size: 2.5rem;"></i>
+                    </div>
+                    <h2 class="fw-bold mb-2">Admin Portal</h2>
+                    <p class="text-muted">Secure administrative access</p>
+                </div>
+
+                <!-- Warning Alert -->
+                <div class="alert alert-danger bg-danger bg-opacity-10 border-danger border-2 mb-4">
+                    <div class="d-flex align-items-start">
+                        <i class="bi bi-exclamation-triangle text-danger me-2" style="font-size: 1.25rem;"></i>
+                        <div>
+                            <strong>Restricted Access</strong>
+                            <p class="mb-1 small">This area is for authorized administrators only</p>
+                            <p class="mb-0 small text-muted">Default: <code>admin</code> / <code>admin123</code></p>
+                        </div>
+                    </div>
                 </div>
                 
                 <form method="POST" action="{{ url_for('auth.admin_login') }}">
                     {{ form.hidden_tag() }}
                     
                     <!-- Username Field -->
-                    <div class="mb-3">
-                        {{ form.username.label(class="form-label") }}
-                        {{ form.username(class="form-control" + (" is-invalid" if form.username.errors else ""), placeholder="Enter admin username") }}
-                        {% if form.username.errors %}
-                            <div class="invalid-feedback">
-                                {% for error in form.username.errors %}{{ error }}{% endfor %}
-                            </div>
-                        {% endif %}
+                    <div class="mb-4">
+                        {{ form.username.label(class="form-label fw-semibold") }}
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-2">
+                                <i class="bi bi-person-badge"></i>
+                            </span>
+                            {{ form.username(class="form-control border-2" + (" is-invalid" if form.username.errors else ""), placeholder="Enter admin username") }}
+                            {% if form.username.errors %}
+                                <div class="invalid-feedback">
+                                    {% for error in form.username.errors %}{{ error }}{% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
                     </div>
 
                     <!-- Password Field -->
-                    <div class="mb-3">
-                        {{ form.password.label(class="form-label") }}
-                        {{ form.password(class="form-control" + (" is-invalid" if form.password.errors else ""), placeholder="Enter admin password") }}
-                        {% if form.password.errors %}
-                            <div class="invalid-feedback">
-                                {% for error in form.password.errors %}{{ error }}{% endfor %}
-                            </div>
-                        {% endif %}
+                    <div class="mb-4">
+                        {{ form.password.label(class="form-label fw-semibold") }}
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-2">
+                                <i class="bi bi-key"></i>
+                            </span>
+                            {{ form.password(class="form-control border-2" + (" is-invalid" if form.password.errors else ""), placeholder="Enter admin password") }}
+                            {% if form.password.errors %}
+                                <div class="invalid-feedback">
+                                    {% for error in form.password.errors %}{{ error }}{% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
                     </div>
 
                     <!-- Remember Me -->
-                    <div class="mb-3 form-check">
-                        {{ form.remember(class="form-check-input") }}
-                        {{ form.remember.label(class="form-check-label") }}
+                    <div class="mb-4">
+                        <div class="form-check">
+                            {{ form.remember(class="form-check-input") }}
+                            {{ form.remember.label(class="form-check-label") }}
+                        </div>
                     </div>
 
                     <!-- Submit Button -->
-                    <div class="d-grid">
+                    <div class="d-grid mb-3">
                         {{ form.submit(class="btn btn-danger btn-lg") }}
                     </div>
                 </form>
 
                 <hr class="my-4">
                 
+                <!-- Links -->
                 <div class="text-center">
-                    <p class="mb-0">
-                        <a href="{{ url_for('auth.login') }}">Back to User Login</a>
-                    </p>
+                    <a href="{{ url_for('auth.login') }}" class="btn btn-outline-secondary w-100">
+                        <i class="bi bi-arrow-left"></i> Back to User Login
+                    </a>
+                </div>
+
+                <!-- Admin Features -->
+                <div class="mt-4">
+                    <p class="text-muted small fw-bold mb-2">Admin Capabilities:</p>
+                    <div class="row g-2">
+                        <div class="col-6">
+                            <div class="p-2 bg-light rounded text-center">
+                                <i class="bi bi-people text-primary d-block mb-1" style="font-size: 1.5rem;"></i>
+                                <small class="fw-semibold">User Management</small>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="p-2 bg-light rounded text-center">
+                                <i class="bi bi-graph-up text-success d-block mb-1" style="font-size: 1.5rem;"></i>
+                                <small class="fw-semibold">Analytics</small>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="p-2 bg-light rounded text-center">
+                                <i class="bi bi-shield-check text-warning d-block mb-1" style="font-size: 1.5rem;"></i>
+                                <small class="fw-semibold">Security</small>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="p-2 bg-light rounded text-center">
+                                <i class="bi bi-gear text-info d-block mb-1" style="font-size: 1.5rem;"></i>
+                                <small class="fw-semibold">System Config</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Security Notice -->
+                <div class="mt-4 p-3 bg-light rounded-3 text-center">
+                    <i class="bi bi-shield-lock-fill text-danger me-2"></i>
+                    <small class="text-muted">All admin actions are logged and monitored</small>
                 </div>
             </div>
         </div>

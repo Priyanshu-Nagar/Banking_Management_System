@@ -1,62 +1,119 @@
 {% extends "layout.html" %}
 
-{% block title %}Withdraw Money - Banking System{% endblock %}
+{% block title %}Withdraw Money - BankFlow{% endblock %}
 
 {% block content %}
-<div class="mb-3">
+<div class="mb-4">
     <a href="{{ url_for('user.dashboard') }}" class="btn btn-secondary">
-        <i class="bi bi-arrow-left"></i> Back to Dashboard
+        <i class="bi bi-arrow-left"></i> Back
     </a>
 </div>
 
 <div class="row justify-content-center">
-    <div class="col-md-6">
-        <div class="card shadow">
-            <div class="card-header bg-warning text-dark">
-                <h4 class="mb-0">
-                    <i class="bi bi-dash-circle"></i> Withdraw Money
-                </h4>
-            </div>
+    <div class="col-lg-6">
+        <div class="card">
             <div class="card-body p-4">
+                <div class="text-center mb-4">
+                    <div class="d-inline-flex align-items-center justify-content-center bg-warning bg-opacity-10 rounded-circle mb-3" style="width: 80px; height: 80px;">
+                        <i class="bi bi-dash-circle text-warning" style="font-size: 2.5rem;"></i>
+                    </div>
+                    <h2 class="fw-bold mb-2">Withdraw Money</h2>
+                    <p class="text-muted">Take cash out from your account</p>
+                </div>
+                
                 <form method="POST" action="{{ url_for('user.withdraw') }}">
                     {{ form.hidden_tag() }}
                     
                     <!-- Account Selection -->
-                    <div class="mb-3">
+                    <div class="mb-4">
                         {{ form.account.label(class="form-label") }}
-                        {{ form.account(class="form-select" + (" is-invalid" if form.account.errors else "")) }}
-                        {% if form.account.errors %}
-                            <div class="invalid-feedback">
-                                {% for error in form.account.errors %}{{ error }}{% endfor %}
-                            </div>
-                        {% endif %}
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-2">
+                                <i class="bi bi-credit-card"></i>
+                            </span>
+                            {{ form.account(class="form-select border-2" + (" is-invalid" if form.account.errors else "")) }}
+                            {% if form.account.errors %}
+                                <div class="invalid-feedback">
+                                    {% for error in form.account.errors %}{{ error }}{% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        <small class="text-muted">Select account to withdraw from</small>
                     </div>
 
                     <!-- Amount -->
-                    <div class="mb-3">
+                    <div class="mb-4">
                         {{ form.amount.label(class="form-label") }}
-                        <div class="input-group">
-                            <span class="input-group-text">₹</span>
-                            {{ form.amount(class="form-control" + (" is-invalid" if form.amount.errors else ""), placeholder="0.00", step="0.01") }}
+                        <div class="input-group input-group-lg">
+                            <span class="input-group-text bg-light border-2 fw-bold" style="font-size: 1.5rem;">₹</span>
+                            {{ form.amount(class="form-control border-2" + (" is-invalid" if form.amount.errors else ""), placeholder="0.00", step="0.01", style="font-size: 1.5rem; font-weight: 600;") }}
                             {% if form.amount.errors %}
                                 <div class="invalid-feedback">
                                     {% for error in form.amount.errors %}{{ error }}{% endfor %}
                                 </div>
                             {% endif %}
                         </div>
+                        <small class="text-muted">Enter amount to withdraw</small>
+                    </div>
+
+                    <!-- Quick Amount Buttons -->
+                    <div class="mb-4">
+                        <label class="form-label">Quick Amount</label>
+                        <div class="d-flex gap-2 flex-wrap">
+                            <button type="button" class="btn btn-outline-warning btn-sm" onclick="document.querySelector('[name=amount]').value='100'">
+                                ₹100
+                            </button>
+                            <button type="button" class="btn btn-outline-warning btn-sm" onclick="document.querySelector('[name=amount]').value='500'">
+                                ₹500
+                            </button>
+                            <button type="button" class="btn btn-outline-warning btn-sm" onclick="document.querySelector('[name=amount]').value='1000'">
+                                ₹1,000
+                            </button>
+                            <button type="button" class="btn btn-outline-warning btn-sm" onclick="document.querySelector('[name=amount]').value='2000'">
+                                ₹2,000
+                            </button>
+                            <button type="button" class="btn btn-outline-warning btn-sm" onclick="document.querySelector('[name=amount]').value='5000'">
+                                ₹5,000
+                            </button>
+                        </div>
                     </div>
 
                     <!-- Description -->
-                    <div class="mb-3">
+                    <div class="mb-4">
                         {{ form.description.label(class="form-label") }}
-                        {{ form.description(class="form-control", placeholder="Optional", rows=2) }}
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-2">
+                                <i class="bi bi-pencil"></i>
+                            </span>
+                            {{ form.description(class="form-control border-2", placeholder="Optional note (e.g., ATM withdrawal, Emergency)", rows=2) }}
+                        </div>
+                    </div>
+
+                    <!-- Important Notice -->
+                    <div class="alert alert-warning d-flex align-items-start mb-4">
+                        <i class="bi bi-exclamation-triangle me-2" style="font-size: 1.25rem;"></i>
+                        <div>
+                            <strong>Important:</strong> Make sure you have sufficient balance before withdrawing. Transaction cannot be reversed.
+                        </div>
                     </div>
 
                     <!-- Submit Button -->
-                    <div class="d-grid">
-                        {{ form.submit(class="btn btn-warning btn-lg") }}
+                    <div class="d-grid gap-2">
+                        {{ form.submit(class="btn btn-warning btn-lg text-white") }}
+                        <a href="{{ url_for('user.dashboard') }}" class="btn btn-light">Cancel</a>
                     </div>
                 </form>
+
+                <!-- Info Box -->
+                <div class="mt-4 p-3 bg-light rounded-3">
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-clock-history text-primary me-2" style="font-size: 1.5rem;"></i>
+                        <div>
+                            <strong>Instant Processing</strong>
+                            <p class="text-muted mb-0 small">Your withdrawal is processed immediately</p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
